@@ -1,0 +1,102 @@
+/* 
+  --background-color: #F5F5F5;
+  --text-color: #333333;
+  --accent-color: #007BFF;
+  --highlight-color: #FF6B6B;
+  --secondary-color-1: #6D6D6D;
+  --secondary-color-2: #FFD700;
+*/
+
+
+
+
+body{
+    background-color: #FAF9F6;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    margin: 0;
+    background-attachment: fixed;
+    background-position: 0 30%;
+}
+
+.large-font{
+    font-size: 5vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.title-font{
+    color: black;
+}
+
+.first-float{
+    float: right;
+    width: 72%;
+    background-color: #FAF9F6;
+    padding: 1.2%;
+    margin: 0.78125vw;
+    margin-right: 1%;
+    border-radius:  0.78125vw;
+    text-decoration: none;
+}
+
+.title-float{
+    float: left;
+    width: 19%;
+    margin-top: 0.76vw;
+    background-color: #acdbf7;
+    border-radius:  0.78125vw;
+    padding:1.56%;
+    margin-left: 1%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.navholder {
+    text-align: center;
+    margin: 3% 3%;
+    border-radius:  0.78125vw;
+    padding: 0.5vw;
+}
+
+.navlinkholder{
+    width: 89%;
+}
+
+.navlink {
+    color: black;
+    background-color:rgba(0, 139, 139, 0);
+    text-align: center;
+    padding: 1.5vw;
+    font-size: 1.5vw;
+    text-decoration: none;
+    border-radius:  0.78125vw;
+}
+
+.navlink a {
+    float: left;
+    color: black;
+    text-align: center;
+    align-self: center;
+    padding: 1vw;
+    float: right;
+    border-radius:  0.78125vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.navlink:hover {
+    background-color: #E5EDF1;
+    color: black;
+    text-decoration: underline;
+  }
+
+
+
+.h2{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.audio_Input{
+
+
+}
