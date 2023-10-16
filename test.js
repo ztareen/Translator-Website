@@ -1,14 +1,33 @@
-const http = require('http');
- 
-const hostname = '127.0.0.1';
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+
+const app = express();
 const port = 3000;
- 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
- 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+
+app.post('/save', (req, res) => {
+    const { inputText } = req.body;
+
+    if (inputText) {
+        fs.appendFile('user_input.txt', inputText + '\n', (err) => {
+            if (err) {
+                res.status(500).send('Error saving the input.');
+            } else {
+                res.send('Input saved successfully!');
+            }
+        });
+    } else {
+        res.status(400).send('Bad Request: Please provide input.');
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
