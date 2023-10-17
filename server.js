@@ -1,34 +1,30 @@
-const https = require('https');
-const subscriptionKey = 'YOUR_AZURE_SUBSCRIPTION_KEY';
-const serviceRegion = 'YOUR_AZURE_SERVICE_REGION';
+const http = require('http');
+const express = require('express');
 
-const requestHeaders = {
-  'Content-Type': 'audio/wav', // Adjust content type if your audio is in a different format
-  'Ocp-Apim-Subscription-Key': subscriptionKey,
-};
+const app = express();
+app.use(express.json())
+app.use(express.urlencoded())
+app.set("view engine","ejs");
+ 
+const hostname = '127.0.0.1';
+const port = 3000;
 
-const options = {
-  hostname: `${serviceRegion}.stt.speech.microsoft.com`,
-  port: 443,
-  path: '/speech/recognition/conversation/cognitiveservices/v1',
-  method: 'POST', // Use POST for sending audio data
-  headers: requestHeaders,
-};
-
-const req = https.request(options, res => {
-  console.log(`statusCode: ${res.statusCode}`);
-
-  res.on('data', d => {
-    process.stdout.write(d);
-  });
+app.get('/',(req,res) =>{
+  //My HTML goes in there?
+  // res.send('<h1>Hello world</h1>');
+  // res.end('the input')
+  // This fills in the template in views/index.ejs with the variables passed to it
+  res.render("index", {name: "Zarak", project: "Translator"})
 });
 
-req.on('error', error => {
-  console.error(error);
-});
 
-// Here you would need to send your audio data as the request body.
-// You can stream or send the audio data as needed.
-// For example, if you have a buffer containing the audio data:
-// req.write(yourAudioBuffer);
-// req.end();
+app.post('/text', (req, res) => {
+  console.log("in post")
+  console.log(req.params.)
+  res.send("<h1>" + req.body.user_text + "</h1>");
+})
+
+//J gives me the link for what to do
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
