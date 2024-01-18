@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,22 +8,160 @@
     <title>Speech-to-Text</title>
     <!-- Load Speech SDK from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk/dist/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #343a40;
+            color: white;
+            padding: 1em 0;
+        }
+
+        .col-sm-title {
+            background-color: #343a40;
+            color: white;
+            border-radius: 1em;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            text-align: center;
+            padding-top: 2%;
+            padding-left: 2em;
+        }
+
+        .col-sm {
+            background-color: #b2c0df;
+            border-radius: 1em;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            padding-top: 1.5%;
+        }
+
+        .col-sm-test {
+            background-color: #e8e8e8;
+            color: #343a40;
+            border-radius: 1em;
+            margin: 1em;
+            padding: 1em;
+        }
+
+        .choose-center {
+            text-align: center;
+        }
+
+        .general-page {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 2em;
+        }
+
+        .button1 {
+            background-color: #343a40;
+            color: white;
+            border-radius: 1em;
+            padding: 0.5em 1em;
+            border: none;
+            cursor: pointer;
+        }
+
+        label {
+            margin-right: 1em;
+        }
+
+        select {
+            margin-right: 1em;
+        }
+
+        .navbar-links {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+        }
+
+        .navbar-links a {
+            color: white;
+            margin-left: 1em;
+            text-decoration: none;
+        }
+
+        .center-upload{
+            display: block;
+            text-align: center;
+             text-decoration: underline;
+             margin-bottom: 1em;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>EJS Hello</h1>
-    <h4><%= name %></h4>
-    <h4><%= project %></h4>
-    <!-- Form for uploading audio file -->
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <label for="audio">Upload Audio File:</label>
-        <input type="file" name="audio" accept=".wav, .mp3" required>
-        <button type="submit">Submit</button>
-    </form>
-    <% if (typeof translationText !== 'undefined') { %>
-        <h4>Translation Result:</h4>
-        <p><%= translationText %></p>
-    <% } else { %>
-        <p>No translation available currently</p>
-    <% } %>
+    <!--Stuff from CDN-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <div class="navbar">
+        <div class="row">
+            <div class="col-sm-title"><p><%= project %> by <%= name %></p></div>
+            <div class="navbar-links">
+                <a href="#">Placeholder 1</a>
+                <a href="#">Placeholder 2</a>
+                <a href="#">Place holder 3</a>
+            </div>
+        </div>
+    </div>
+<!--Maybe like a div to show that this is a seperate part of the page???-->
+    <div class="general-page">
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                    <label for="audio" class="center-upload">Upload Audio File</label>
+                    <div class="choose-center">
+                        <input type="file" name="audio" accept=".wav, .mp3" required>
+                        <label for="language">Select Language:</label>
+                        <select name="language" id="language">
+                            <option value="select">Select a Language</option>
+                            <option value="hi-IN">Hindi</option>
+                            <option value="en-US">English</option>
+                            <option value="ar-EG">Arabic</option>
+                        </select>
+                        <button class="button1" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="row justify-content-center">
+                <% if (typeof translationText !== 'undefined') { %>
+                    <h4>Translation Result:</h4>
+                    <p><%= translationText %></p>
+                <% } else { %>
+                    <p>No translation available currently</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
+
+<!--
+Things to add:
+2. Errors (for example uploading the incorrect file type. Should redirect you to say "Incorrect file type submitted."
+Not just "Server Error"). FIXED: When there is no flie uploaded
+4. Color palate is sorta ugly
+5. add in the "real time" aspect w/ this https://www.youtube.com/watch?v=TuKXlpJhsp4&t=325s
+6. input in the left, actual translation results on the right
+7. microphone speak into save and translate. (i can control file type w that. "record my audio w/ JS and submit")
+8. Whisper can do streams but thats sorta beyond what i know atm
+
+Workflow first before UI
+Min: Click microphone icon, speak in, autosubmit/manual submit.
+Turns into language that they want.
+
+Have audio file, display english text, then translated text, Then a speak button for translated audio.
+
+Maybe track down Mr. Ho who speaks a ton of languages and see if you can communicate language to language.
+
+
+Future:
+7. downloadable future?
+-->

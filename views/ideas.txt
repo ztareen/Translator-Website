@@ -1,0 +1,16 @@
+Things to add:
+1. Languages (more of them at least lol)
+2. Errors (for example uploading the incorrect file type. Should redirect you to say "Incorrect file type submitted."
+Not just "Server Error"). FIXED: When there is no flie uploaded
+4. Color palate is sorta ugly
+5. add in the "real time" aspect w/ this https://www.youtube.com/watch?v=TuKXlpJhsp4&t=325s
+6. input in the left, actual translation results on the right
+
+
+
+
+
+
+
+Future:
+7. downloadable future? where you dont need an internet connection?

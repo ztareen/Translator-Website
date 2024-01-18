@@ -27,7 +27,10 @@ app.post('/upload', async (req, res) => {
     }
     const audioFile = req.files.audio;
     const audioFilePath = path.join(__dirname, 'uploads', audioFile.name);
-    const responseText = await make_stt_api_call(audioFilePath);
+
+    const language = req.body.language;
+
+    const responseText = await make_stt_api_call(audioFilePath,language);
     
     const response = JSON.parse(responseText);
     
@@ -43,14 +46,16 @@ app.post('/upload', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-async function make_stt_api_call(path) {
+async function make_stt_api_call(path, language) {
   return new Promise((resolve, reject) => {
     const https = require('follow-redirects').https;
     const fs = require('fs');
     const options = {
       'method': 'POST',
       'hostname': 'westus.stt.speech.microsoft.com',
-      'path': '/speech/recognition/conversation/cognitiveservices/v1?language=hi-IN',
+      'path': `/speech/recognition/conversation/cognitiveservices/v1?language=${language}`,
+      //'path': '/speech/recognition/conversation/cognitiveservices/v1?language=' + language,
+      //doesnt work
       'headers': {
         'Ocp-Apim-Subscription-Key': apiKey,
         'Content-type': 'audio/wav',
