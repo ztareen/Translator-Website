@@ -1,16 +1,312 @@
-Things to add:
-1. Languages (more of them at least lol)
-2. Errors (for example uploading the incorrect file type. Should redirect you to say "Incorrect file type submitted."
-Not just "Server Error"). FIXED: When there is no flie uploaded
-4. Color palate is sorta ugly
-5. add in the "real time" aspect w/ this https://www.youtube.com/watch?v=TuKXlpJhsp4&t=325s
-6. input in the left, actual translation results on the right
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-to-Text</title>
+    <!-- Load Speech SDK from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk/dist/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script src="C:\Users\ztareen\Documents\TranslatorWebsite\localrecording.js"></script>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
 
+        .navbar {
+            background-color: #343a40;
+            color: white;
+            padding: 1em 0;
+        }
 
+        .col-sm-title {
+            background-color: #343a40;
+            color: white;
+            border-radius: 1em;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            text-align: center;
+            padding-top: 2%;
+            padding-left: 2em;
+        }
 
+        .col-sm {
+            background-color: #b2c0df;
+            border-radius: 1em;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            padding-top: 1.5%;
+        }
 
+        .col-sm-test {
+            background-color: #e8e8e8;
+            color: #343a40;
+            border-radius: 1em;
+            margin: 1em;
+            padding: 1em;
+        }
 
+        .choose-center {
+            text-align: center;
+        }
 
-Future:
-7. downloadable future? where you dont need an internet connection?
+        .general-page {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 2em;
+        }
+
+        .button1 {
+            background-color: #343a40;
+            color: white;
+            border-radius: 1em;
+            padding: 0.5em 1em;
+            border: none;
+            cursor: pointer;
+        }
+
+        label {
+            margin-right: 1em;
+        }
+
+        select {
+            margin-right: 1em;
+        }
+
+        .navbar-links {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+        }
+
+        .navbar-links a {
+            color: white;
+            margin-left: 1em;
+            text-decoration: none;
+        }
+
+        .center-upload {
+            display: block;
+            text-align: center;
+            text-decoration: underline;
+            margin-bottom: 1em;
+        }
+
+        .button-record {
+            background-color: #28a745;
+            color: white;
+            border-radius: 1em;
+            padding: 0.5em 1em;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Stuff from CDN -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+
+    <div class="navbar">
+        <div class="row">
+            <div class="col-sm-title">
+                <p><%= project %> by <%= name %></p>
+            </div>
+            <div class="navbar-links">
+                <a href="#">Placeholder 1</a>
+                <a href="#">Placeholder 2</a>
+                <a href="#">Place holder 3</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maybe like a div to show that this is a separate part of the page??? -->
+    <div class="general-page">
+        <div class="container mt-4">
+            <div id="controls">
+                <button id="recordButton">Record</button>
+                <button id="pauseButton" disabled>Pause</button>
+                <button id="stopButton" disabled>Stop</button>
+            </div>
+            <ol id="recordingsList"></ol>
+            <div class="row justify-content-center">
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                    <label for="audio" class="center-upload">Upload Audio File</label>
+                    <div class="choose-center">
+
+                    </div>
+
+                    <div class="choose-center">
+                        <input type="file" name="audio" accept=".wav, .mp3" required>
+                        <label for="language">Select Language:</label>
+                        <select name="language" id="language">
+                            <option value="select">Select a Language</option>
+                            <option value="hi-IN">Hindi</option>
+                            <option value="en-US">English</option>
+                            <option value="ar-EG">Arabic</option>
+                        </select>
+                        <button class="button1" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row justify-content-center">
+                <% if (typeof transcriptionText !== 'undefined') { %>
+                    <h4>Transcription Result:</h4>
+                    <p><%= transcriptionText %></p>
+                <% } else { %>
+                    <p>No transcription available currently</p>
+                <% } %>
+            </div>
+
+            <div class="row justify-content-center">
+                <% if (typeof translationText !== 'undefined') { %>
+                    <h4>Translation Result:</h4>
+                    <p><%= translationText %></p>
+                <% } else { %>
+                    <p>No translation available currently</p>
+                <% } %>
+            </div>
+
+            <div class="row justify-content-center">
+                <% if (typeof speechData !== 'undefined') { %>
+                    <audio controls>
+                        <source src="data:audio/wav;base64,<%= speechData.toString('base64') %>" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                <% } else { %>
+                    <p>No speech data available currently</p>
+                <% } %>
+            </div>
+
+        </div>
+    </div>
+    <!-- Your existing scripts... -->
+</body>
+<!--Mulit part form submission for server side recorder.js button-->
+
+<script>
+    URL = window.URL || window.webkitURL;
+
+    var gumStream; 
+    var rec; 
+    var input; 
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    var audioContext = new AudioContext();
+
+    var recordButton = document.getElementById("recordButton");
+    var stopButton = document.getElementById("stopButton");
+    var pauseButton = document.getElementById("pauseButton");
+
+    recordButton.addEventListener("click", startRecording);
+    stopButton.addEventListener("click", stopRecording);
+    pauseButton.addEventListener("click", pauseRecording);
+
+    function startRecording() {
+        console.log("recordButton clicked");
+
+        var constraints = { audio: true, video: false };
+
+        recordButton.disabled = true;
+        stopButton.disabled = false;
+        pauseButton.disabled = false;
+
+        navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+            console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+
+            audioContext = new AudioContext();
+
+            gumStream = stream;
+            input = audioContext.createMediaStreamSource(stream);
+
+            rec = new Recorder(input, { numChannels: 1 });
+
+            rec.record();
+
+            console.log("Recording started");
+        }).catch(function(err) {
+            recordButton.disabled = false;
+            stopButton.disabled = true;
+            pauseButton.disabled = true;
+        });
+    }
+
+    function pauseRecording() {
+        console.log("pauseButton clicked rec.recording=", rec.recording);
+        if (rec.recording) {
+            rec.stop();
+            pauseButton.innerHTML = "Resume";
+        } else {
+            rec.record();
+            pauseButton.innerHTML = "Pause";
+        }
+    }
+
+    function stopRecording() {
+        console.log("stopButton clicked");
+
+        stopButton.disabled = true;
+        recordButton.disabled = false;
+        pauseButton.disabled = true;
+
+        pauseButton.innerHTML = "Pause";
+
+        rec.stop();
+        gumStream.getAudioTracks()[0].stop();
+
+        rec.exportWAV(createDownloadLink);
+    }
+
+    function createDownloadLink(blob) {
+        var url = URL.createObjectURL(blob);
+        var au = document.createElement('audio');
+        var li = document.createElement('li');
+        var link = document.createElement('a');
+
+        var filename = new Date().toISOString();
+
+        au.controls = true;
+        au.src = url;
+
+        link.href = url;
+        link.download = filename + ".wav";
+        link.innerHTML = "Save to disk";
+
+        li.appendChild(au);
+        li.appendChild(document.createTextNode(filename + ".wav "));
+        li.appendChild(link);
+
+        var upload = document.createElement('a');
+        upload.href = "#";
+        upload.innerHTML = "Upload";
+        upload.addEventListener("click", function(event){
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function(e) {
+                if (this.readyState === 4) {
+                    console.log("Server returned: ", e.target.responseText);
+                }
+            };
+            var fd = new FormData();
+            fd.append("audio_data", blob, filename);
+            xhr.open("POST", "upload.php", true);
+            xhr.send(fd);
+        });
+
+        li.appendChild(document.createTextNode(" "));
+        li.appendChild(upload);
+
+        recordingsList.appendChild(li);
+    }
+</script>
+</html>
